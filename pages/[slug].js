@@ -35,7 +35,10 @@ export const getStaticProps = async (context) => {
     //   2
     // )}`;
     return {
-      props: data.pageProps,
+      props: {
+        ...data.pageProps,
+        debug: "Success!",
+      },
       revalidate: 10,
     };
 
