@@ -23,7 +23,7 @@ export const getStaticProps = async (context) => {
   const date = new Date().toISOString();
   let debug = "";
   try {
-    const buildId = fs.readFileSync(".next/BUILD_ID").trim();
+    const buildId = fs.readFileSync(".next/BUILD_ID", "utf-8").trim();
     debug += `Build ID: ${buildId}`;
     const result = await fetch(
       `https://isr-cache.vercel.app/_next/data/${buildId}/${slug}.json`
@@ -50,6 +50,9 @@ export const getStaticProps = async (context) => {
     // debug += `\n\nroutes-manifest.json\n\n${fs.readFileSync(
     //   ".next/routes-manifest.json"
     // )}`;
+    debug += `\n\npages-manifest.json\n\n${fs.readFileSync(
+      ".next/server/pages-manifest.json"
+    )}`;
   } catch (error) {
     debug = error.message;
   }
