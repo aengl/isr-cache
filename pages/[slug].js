@@ -22,7 +22,7 @@ export const getStaticProps = async (context) => {
   const date = new Date().toISOString();
   let debug = "";
   try {
-    debug = JSON.stringify(fs.readdirSync("."), undefined, 2);
+    debug = JSON.stringify(fs.readdirSync(".next"), undefined, 2);
   } catch (error) {
     debug = error.message;
   }
