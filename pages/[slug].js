@@ -6,16 +6,12 @@ const useCachedProps =
   process.env.NODE_ENV === "production" && process.env.CI === undefined;
 
 const requestPagePropsForPath = async (path) => {
-  try {
-    const buildId = fs.readFileSync(".next/BUILD_ID", "utf-8").trim();
-    const result = await fetch(
-      `https://isr-cache.vercel.app/_next/data/${buildId}/${path}.json`
-    );
-    const data = await result.json();
-    return data.pageProps;
-  } catch {
-    return {};
-  }
+  const buildId = fs.readFileSync(".next/BUILD_ID", "utf-8").trim();
+  const result = await fetch(
+    `https://isr-cache.vercel.app/_next/data/${buildId}/${path}.json`
+  );
+  const data = await result.json();
+  return data.pageProps;
 };
 
 export const Test = ({ date, debug, slug }) => {
