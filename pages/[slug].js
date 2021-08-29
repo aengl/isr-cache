@@ -1,5 +1,6 @@
 import fs from "fs";
 import styles from "../styles/Home.module.css";
+import fetch from "node-fetch";
 
 export const Test = ({ date, debug, slug }) => {
   return (
@@ -22,21 +23,33 @@ export const getStaticProps = async (context) => {
   const date = new Date().toISOString();
   let debug = "";
   try {
-    debug = JSON.stringify(fs.readdirSync(".next"), undefined, 2);
-    debug = JSON.stringify(fs.readdirSync(".next/server"), undefined, 2);
-    debug += `\n\nBUILD_ID\n\n${fs.readFileSync(".next/BUILD_ID")}`;
-    debug += `\n\nbuild-manifest.json\n\n${fs.readFileSync(
-      ".next/build-manifest.json"
+    const buildId = fs.readFileSync(".next/BUILD_ID").trim();
+    debug += `Build ID: ${buildId}`;
+    const result = await fetch(
+      `https://isr-cache.vercel.app/_next/data/${buildId}/${slug}.json`
+    );
+    const data = await result.json();
+    debug += `\n\nhttps://isr-cache.vercel.app/_next/data/${buildId}/${slug}.json\n\n${JSON.stringify(
+      data,
+      undefined,
+      2
     )}`;
-    debug += `\n\nprerender-manifest.json\n\n${fs.readFileSync(
-      ".next/prerender-manifest.json"
-    )}`;
-    debug += `\n\nreact-loadable-manifest.json\n\n${fs.readFileSync(
-      ".next/react-loadable-manifest.json"
-    )}`;
-    debug += `\n\nroutes-manifest.json\n\n${fs.readFileSync(
-      ".next/routes-manifest.json"
-    )}`;
+
+    // debug = JSON.stringify(fs.readdirSync(".next"), undefined, 2);
+    // debug = JSON.stringify(fs.readdirSync(".next/server"), undefined, 2);
+    // debug += `\n\nBUILD_ID\n\n${fs.readFileSync(".next/BUILD_ID")}`;
+    // debug += `\n\nbuild-manifest.json\n\n${fs.readFileSync(
+    //   ".next/build-manifest.json"
+    // )}`;
+    // debug += `\n\nprerender-manifest.json\n\n${fs.readFileSync(
+    //   ".next/prerender-manifest.json"
+    // )}`;
+    // debug += `\n\nreact-loadable-manifest.json\n\n${fs.readFileSync(
+    //   ".next/react-loadable-manifest.json"
+    // )}`;
+    // debug += `\n\nroutes-manifest.json\n\n${fs.readFileSync(
+    //   ".next/routes-manifest.json"
+    // )}`;
   } catch (error) {
     debug = error.message;
   }
