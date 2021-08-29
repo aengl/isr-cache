@@ -1,6 +1,7 @@
+import fs from "fs";
 import styles from "../styles/Home.module.css";
 
-export const Test = ({ date, slug }) => {
+export const Test = ({ date, debug, slug }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
@@ -9,6 +10,7 @@ export const Test = ({ date, slug }) => {
       <p>
         Page generated on <date>{date}</date>
       </p>
+      <pre style={{ maxWidth: 400 }}>{debug}</pre>
     </div>
   );
 };
@@ -18,8 +20,14 @@ export default Test;
 export const getStaticProps = async (context) => {
   const slug = context.params.slug;
   const date = new Date().toISOString();
+  let debug = "";
+  try {
+    debug = JSON.stringify(fs.readdirSync("_next"), undefined, 2);
+  } catch (error) {
+    debug = error.message;
+  }
   return {
-    props: { date, slug },
+    props: { date, debug, slug },
     revalidate: 10,
   };
 };
