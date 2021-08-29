@@ -24,16 +24,20 @@ export const getStaticProps = async (context) => {
   let debug = "";
   try {
     const buildId = fs.readFileSync(".next/BUILD_ID", "utf-8").trim();
-    debug += `Build ID: ${buildId}`;
+    // debug += `Build ID: ${buildId}`;
     const result = await fetch(
       `https://isr-cache.vercel.app/_next/data/${buildId}/${slug}.json`
     );
     const data = await result.json();
-    debug += `\n\nhttps://isr-cache.vercel.app/_next/data/${buildId}/${slug}.json\n\n${JSON.stringify(
-      data,
-      undefined,
-      2
-    )}`;
+    // debug += `\n\nhttps://isr-cache.vercel.app/_next/data/${buildId}/${slug}.json\n\n${JSON.stringify(
+    //   data,
+    //   undefined,
+    //   2
+    // )}`;
+    return {
+      props: data.pageProps,
+      revalidate: 10,
+    };
 
     // debug = JSON.stringify(fs.readdirSync(".next"), undefined, 2);
     // debug = JSON.stringify(fs.readdirSync(".next/server"), undefined, 2);
@@ -50,9 +54,9 @@ export const getStaticProps = async (context) => {
     // debug += `\n\nroutes-manifest.json\n\n${fs.readFileSync(
     //   ".next/routes-manifest.json"
     // )}`;
-    debug += `\n\npages-manifest.json\n\n${fs.readFileSync(
-      ".next/server/pages-manifest.json"
-    )}`;
+    // debug += `\n\npages-manifest.json\n\n${fs.readFileSync(
+    //   ".next/server/pages-manifest.json"
+    // )}`;
   } catch (error) {
     debug = error.message;
   }
