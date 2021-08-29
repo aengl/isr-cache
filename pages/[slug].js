@@ -23,7 +23,20 @@ export const getStaticProps = async (context) => {
   let debug = "";
   try {
     debug = JSON.stringify(fs.readdirSync(".next"), undefined, 2);
+    debug = JSON.stringify(fs.readdirSync(".next/server"), undefined, 2);
     debug += `\n\nBUILD_ID\n\n${fs.readFileSync(".next/BUILD_ID")}`;
+    debug += `\n\nbuild-manifest.json\n\n${fs.readFileSync(
+      ".next/build-manifest.json"
+    )}`;
+    debug += `\n\nprerender-manifest.json\n\n${fs.readFileSync(
+      ".next/prerender-manifest.json"
+    )}`;
+    debug += `\n\nreact-loadable-manifest.json\n\n${fs.readFileSync(
+      ".next/react-loadable-manifest.json"
+    )}`;
+    debug += `\n\nroutes-manifest.json\n\n${fs.readFileSync(
+      ".next/routes-manifest.json"
+    )}`;
   } catch (error) {
     debug = error.message;
   }
