@@ -23,6 +23,7 @@ export const getStaticProps = async (context) => {
   let debug = "";
   try {
     debug = JSON.stringify(fs.readdirSync(".next"), undefined, 2);
+    debug += `\n\nBUILD_ID\n\n${fs.readFileSync(".next/BUILD_ID")}`;
   } catch (error) {
     debug = error.message;
   }
