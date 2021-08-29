@@ -14,16 +14,20 @@ const requestPagePropsForPath = async (path) => {
   return data.pageProps;
 };
 
-export const Test = ({ date, debug, slug }) => {
+export const Test = ({ dateGenerated, dateRevalidated, slug }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
         Welcome to <a href="https://nextjs.org">{slug}</a>
       </h1>
       <p>
-        Page generated on <date>{date}</date>
+        Page generated on <date>{dateGenerated}</date>
       </p>
-      <pre>{debug}</pre>
+      {dateRevalidated && (
+        <p>
+          Page revalidated on <date>{dateRevalidated}</date>
+        </p>
+      )}
     </div>
   );
 };
@@ -32,18 +36,18 @@ export default Test;
 
 export const getStaticProps = async (context) => {
   const slug = context.params.slug;
-  const date = new Date().toISOString();
+  const dateGenerated = new Date().toISOString();
   if (useCachedProps) {
     return {
       props: {
         ...(await requestPagePropsForPath(slug)),
-        debug: "Success!",
+        dateRevalidated: new Date().toISOString(),
       },
       revalidate: 10,
     };
   }
   return {
-    props: { date, slug },
+    props: { dateGenerated, slug },
     revalidate: 10,
   };
 };
