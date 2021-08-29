@@ -2,6 +2,9 @@ import fs from "fs";
 import styles from "../styles/Home.module.css";
 import fetch from "node-fetch";
 
+const useCachedProps =
+  process.env.NODE_ENV === "production" && process.env.CI === undefined;
+
 const requestPagePropsForPath = async (path) => {
   try {
     const buildId = fs.readFileSync(".next/BUILD_ID", "utf-8").trim();
@@ -34,20 +37,17 @@ export default Test;
 export const getStaticProps = async (context) => {
   const slug = context.params.slug;
   const date = new Date().toISOString();
-  let debug = "";
-  try {
+  if (useCachedProps) {
     return {
       props: {
         ...(await requestPagePropsForPath(slug)),
-        debug: "Success! " + process.env.CI,
+        debug: "Success!",
       },
       revalidate: 10,
     };
-  } catch (error) {
-    debug = error.message + process.env.CI;
   }
   return {
-    props: { date, debug, slug },
+    props: { date, slug },
     revalidate: 10,
   };
 };
