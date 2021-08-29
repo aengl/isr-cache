@@ -10,7 +10,7 @@ export const Test = ({ date, debug, slug }) => {
       <p>
         Page generated on <date>{date}</date>
       </p>
-      <pre style={{ maxWidth: 400 }}>{debug}</pre>
+      <pre>{debug}</pre>
     </div>
   );
 };
@@ -22,7 +22,7 @@ export const getStaticProps = async (context) => {
   const date = new Date().toISOString();
   let debug = "";
   try {
-    debug = JSON.stringify(fs.readdirSync("_next"), undefined, 2);
+    debug = JSON.stringify(fs.readdirSync("."), undefined, 2);
   } catch (error) {
     debug = error.message;
   }
