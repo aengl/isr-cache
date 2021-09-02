@@ -37,7 +37,14 @@ export default Test;
 export const getStaticProps = async (context) => {
   const slug = context.params.slug;
   const dateGenerated = new Date().toISOString();
+
+  // ISR
   if (useCachedProps) {
+    await fetch("https://isr-cache.vercel.app/api/hello", {
+      body: JSON.stringify({ message: `Triggered ISR for "${slug}"` }),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
     return {
       props: {
         ...(await requestPagePropsForPath(slug)),
@@ -46,6 +53,8 @@ export const getStaticProps = async (context) => {
       revalidate: 10,
     };
   }
+
+  // Build-time props
   return {
     props: { dateGenerated, slug },
     revalidate: 10,
