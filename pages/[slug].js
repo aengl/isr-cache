@@ -1,4 +1,4 @@
-import fs from "fs";
+// import fs from "fs";
 import styles from "../styles/Home.module.css";
 import fetch from "node-fetch";
 
@@ -47,7 +47,7 @@ export const getStaticProps = async (context) => {
     });
     return {
       props: {
-        ...(await requestPagePropsForPath(slug)),
+        // ...(await requestPagePropsForPath(slug)),
         dateRevalidated: new Date().toISOString(),
       },
       revalidate: 10,
